@@ -12,14 +12,18 @@ def send_email(to: str, subject: str, body: str, cc: str = ""):
     mail.Body = body
     mail.Send()
 
+
 today = date(2018, 9, 30)
 subject = "Email Subject"
+
+
 def prepare_body(name, date):
     body = f"""To {name}
 Todays date {date: %d %B %Y}
 Second Line
 """
     return body
+
 
 def read_file(location):
     with open(location, newline="") as csvfile:
@@ -33,6 +37,7 @@ def read_file(location):
             recipient_details.append(row)
     return recipient_details
 
+
 def prepare_email(recipient_details):
     for recipient in recipient_details:
         to, cc, name = recipient
@@ -40,5 +45,7 @@ def prepare_email(recipient_details):
         body = prepare_body(name, today)
         send_email(to, subject, body, cc)
 
-recipients = read_file('addresses.csv')
-prepare_email(recipients)
+
+if __name__ == "__main__":
+    recipients = read_file('addresses.csv')
+    prepare_email(recipients)
