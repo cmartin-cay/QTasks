@@ -1,0 +1,13 @@
+import PyPDF2
+
+filename = "path"
+file = open(filename, 'rb')
+pdf_file = PyPDF2.PdfFileReader(file)
+num_pages = pdf_file.numPages
+
+text = ""
+
+for page in range(0, num_pages):
+    pdf_page = pdf_file.getPage(page)
+    text += pdf_page.extractText()
+
