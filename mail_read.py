@@ -2,10 +2,15 @@ import win32com.client
 from datetime import datetime, timedelta
 from pathlib import Path
 import dateutil.parser
+import json
+
+with open("date.json", "r") as infile:
+    start_time = json.load(infile)
+    start_time = dateutil.parser.parse(start_time)
 
 path = Path("C:\\Users\\Gubbo\\Desktop")
 
-my_dict = {"colin.martKin@gmail.com": path}
+my_dict = {"colin.martin@gmail.com": path}
 
 outlook = win32com.client.Dispatch("Outlook.Application")
 mapi = outlook.GetNamespace("MAPI")
@@ -19,7 +24,7 @@ def get_month_from_email(email):
         email_date_python = dateutil.parser.parse(str(email_date))
         return email_date_python.strftime("%m %B"), email_date_python.strftime("%d")
 
-today = datetime.now() - timedelta(days=5)
+today = start_time - timedelta(days=10)
 today_messages = messages.Restrict(f"[CreationTime] >= '{today.strftime('%m/%d/%Y %H:%M %p')}'")
 
 def save_message(message):
@@ -37,6 +42,9 @@ def save_message(message):
 for message in today_messages:
     if message.To in my_dict:
         save_message(message)
+
+with open("date.json", "w") as outfile:
+    json.dump(datetime.utcnow().isoformat(), outfile)
 
 
 
